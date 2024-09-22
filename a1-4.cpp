@@ -1,5 +1,5 @@
 #include <iostream>
-#include <algorithm> // for std::merge
+#include <algorithm>
 
 using namespace std;
 
@@ -7,19 +7,31 @@ using namespace std;
 double findMedian(int arr1[], int size1, int arr2[], int size2) {
     int totalSize = size1 + size2;
     int merged[totalSize];
-
-    // Merge the two arrays into a single sorted array
-    merge(arr1, arr1 + size1, arr2, arr2 + size2, merged);
-
-    // If the total size is odd, return the middle element
-    if (totalSize % 2 == 1) {
-        return merged[totalSize / 2];
+    
+    // Merge the two arrays into one
+    int i = 0, j = 0, k = 0;
+    
+    while (i < size1 && j < size2) {
+        if (arr1[i] < arr2[j]) {
+            merged[k++] = arr1[i++];
+        } else {
+            merged[k++] = arr2[j++];
+        }
     }
-    // If the total size is even, return the average of the two middle elements
-    else {
-        int mid1 = totalSize / 2;
-        int mid2 = mid1 - 1;
-        return (merged[mid1] + merged[mid2]) / 2.0;
+    
+    while (i < size1) {
+        merged[k++] = arr1[i++];
+    }
+    
+    while (j < size2) {
+        merged[k++] = arr2[j++];
+    }
+    
+    // Calculate the median
+    if (totalSize % 2 == 0) {
+        return (merged[totalSize / 2 - 1] + merged[totalSize / 2]) / 2.0;
+    } else {
+        return merged[totalSize / 2];
     }
 }
 
@@ -39,8 +51,8 @@ int main() {
     for (int i = 0; i < size2; ++i) {
         cin >> arr1[i];
     }
-
+    
     cout << "Median = " << findMedian(arr, size1, arr1, size2) << endl;
-
+    
     return 0;
 }
