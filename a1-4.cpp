@@ -1,8 +1,10 @@
 #include <iostream>
+#include <fstream>
 #include <climits>
 
 using namespace std;
 
+// Function to find the median
 double findMedian(int arr1[], int size1, int arr2[], int size2) {
     if (size1 > size2) return findMedian(arr2, size2, arr1, size1); // ensure size1 <= size2
 
@@ -50,8 +52,19 @@ int main() {
     for (int i = 0; i < size2; ++i) {
         cin >> arr1[i];
     }
+
+    // Open output file for writing
+    ofstream outfile("./a1-4.out");
+    if (!outfile) {
+        cerr << "Error opening file!" << endl;
+        return 1;
+    }
     
-    cout << "Median = " << findMedian(arr, size1, arr1, size2) << endl;
+    // Write the median to the file
+    outfile << "Median = " << findMedian(arr, size1, arr1, size2) << endl;
     
+    // Close the file
+    outfile.close();
+
     return 0;
 }
