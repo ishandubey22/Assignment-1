@@ -7,9 +7,9 @@ double findMedian(int arr1[], int size1, int arr2[], int size2) {
     // Handle the case when both arrays are empty
     if (size1 == 0 && size2 == 0) {
         cout << "Empty Array" << endl;
-        return -1;  // Special return value to indicate an empty array case
+        return 0;  // Median is undefined for empty arrays, return a placeholder like 0
     }
-    
+
     // Handle the case when only one array is empty
     if (size1 == 0) {
         if (size2 % 2 == 0)
