@@ -6,7 +6,7 @@ using namespace std;
 double findMedian(int arr1[], int size1, int arr2[], int size2) {
     // Handle the case when both arrays are empty
     if (size1 == 0 && size2 == 0) {
-        return -1;  // Return a special value for an empty input
+        return "Empty Array";  // Return a special value for an empty input
     }
     
     // Handle the case when only one array is empty
