@@ -1,39 +1,69 @@
 #include <iostream>
-#include <fstream>
-#include <climits>
-
 using namespace std;
 
-// Function to find the median
+// Function to find the median of two sorted arrays
 double findMedian(int arr1[], int size1, int arr2[], int size2) {
-    if (size1 > size2) return findMedian(arr2, size2, arr1, size1); // ensure size1 <= size2
-
-    int low = 0, high = size1;
-    int halfLen = (size1 + size2 + 1) / 2;
+    int totalSize = size1 + size2;
+    int medianPos = (totalSize - 1) / 2;
     
-    while (low <= high) {
-        int i = (low + high) / 2;
-        int j = halfLen - i;
+    int i = 0, j = 0, count = 0;
+    int prev = -1, current = -1;
 
-        int maxLeftA = (i == 0) ? INT_MIN : arr1[i - 1];
-        int minRightA = (i == size1) ? INT_MAX : arr1[i];
-
-        int maxLeftB = (j == 0) ? INT_MIN : arr2[j - 1];
-        int minRightB = (j == size2) ? INT_MAX : arr2[j];
-
-        if (maxLeftA <= minRightB && maxLeftB <= minRightA) {
-            if ((size1 + size2) % 2 == 0)
-                return (max(maxLeftA, maxLeftB) + min(minRightA, minRightB)) / 2.0;
-            else
-                return max(maxLeftA, maxLeftB);
-        } else if (maxLeftA > minRightB) {
-            high = i - 1;
+    // Merge both arrays until we find the median position
+    while (i < size1 && j < size2) {
+        if (arr1[i] <= arr2[j]) {
+            prev = current;
+            current = arr1[i];
+            i++;
         } else {
-            low = i + 1;
+            prev = current;
+            current = arr2[j];
+            j++;
         }
+        
+        if (count == medianPos) {
+            if (totalSize % 2 == 0) {
+                return (current + prev) / 2.0;
+            } else {
+                return current;
+            }
+        }
+        count++;
     }
 
-    return 0.0; // should never reach here
+    // If elements remain in arr1
+    while (i < size1) {
+        prev = current;
+        current = arr1[i];
+        i++;
+        
+        if (count == medianPos) {
+            if (totalSize % 2 == 0) {
+                return (current + prev) / 2.0;
+            } else {
+                return current;
+            }
+        }
+        count++;
+    }
+
+    // If elements remain in arr2
+    while (j < size2) {
+        prev = current;
+        current = arr2[j];
+        j++;
+        
+        if (count == medianPos) {
+            if (totalSize % 2 == 0) {
+                return (current + prev) / 2.0;
+            } else {
+                return current;
+            }
+        }
+        count++;
+    }
+
+    return -1; // This line should never be reached
 }
 
 int main() {
@@ -52,19 +82,8 @@ int main() {
     for (int i = 0; i < size2; ++i) {
         cin >> arr1[i];
     }
-
-    // Open output file for writing
-    ofstream outfile("./a1-4.out");
-    if (!outfile) {
-        cerr << "Error opening file!" << endl;
-        return 1;
-    }
     
-    // Write the median to the file
-    outfile << "Median = " << findMedian(arr, size1, arr1, size2) << endl;
-    
-    // Close the file
-    outfile.close();
+    cout << "Median = " << findMedian(arr, size1, arr1, size2) << endl;
 
     return 0;
 }
