@@ -1,89 +1,78 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 // Function to find the median of two sorted arrays
 double findMedian(int arr1[], int size1, int arr2[], int size2) {
-    int totalSize = size1 + size2;
-    int medianPos = (totalSize - 1) / 2;
+    // Handle the case when both arrays are empty
+    if (size1 == 0 && size2 == 0) {
+        return -1;  // Return a special value for an empty input
+    }
     
-    int i = 0, j = 0, count = 0;
-    int prev = -1, current = -1;
+    // Handle the case when only one array is empty
+    if (size1 == 0) {
+        if (size2 % 2 == 0)
+            return (arr2[size2 / 2 - 1] + arr2[size2 / 2]) / 2.0;
+        else
+            return arr2[size2 / 2];
+    }
+    if (size2 == 0) {
+        if (size1 % 2 == 0)
+            return (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0;
+        else
+            return arr1[size1 / 2];
+    }
 
-    // Merge both arrays until we find the median position
+    // Now merge the two arrays and find the median
+    int merged[size1 + size2];
+    int i = 0, j = 0, k = 0;
+
+    // Merge arrays
     while (i < size1 && j < size2) {
         if (arr1[i] <= arr2[j]) {
-            prev = current;
-            current = arr1[i];
-            i++;
+            merged[k++] = arr1[i++];
         } else {
-            prev = current;
-            current = arr2[j];
-            j++;
+            merged[k++] = arr2[j++];
         }
-        
-        if (count == medianPos) {
-            if (totalSize % 2 == 0) {
-                return (current + prev) / 2.0;
-            } else {
-                return current;
-            }
-        }
-        count++;
     }
 
-    // If elements remain in arr1
+    // Copy remaining elements from arr1, if any
     while (i < size1) {
-        prev = current;
-        current = arr1[i];
-        i++;
-        
-        if (count == medianPos) {
-            if (totalSize % 2 == 0) {
-                return (current + prev) / 2.0;
-            } else {
-                return current;
-            }
-        }
-        count++;
+        merged[k++] = arr1[i++];
     }
 
-    // If elements remain in arr2
+    // Copy remaining elements from arr2, if any
     while (j < size2) {
-        prev = current;
-        current = arr2[j];
-        j++;
-        
-        if (count == medianPos) {
-            if (totalSize % 2 == 0) {
-                return (current + prev) / 2.0;
-            } else {
-                return current;
-            }
-        }
-        count++;
+        merged[k++] = arr2[j++];
     }
 
-    return -1; // This line should never be reached
+    // Find median of merged array
+    int totalSize = size1 + size2;
+    if (totalSize % 2 == 0) {
+        return (merged[totalSize / 2 - 1] + merged[totalSize / 2]) / 2.0;
+    } else {
+        return merged[totalSize / 2];
+    }
 }
 
 int main() {
     int size1;
     cin >> size1;
 
-    int arr[size1];
+    int arr1[size1];
     for (int i = 0; i < size1; ++i) {
-        cin >> arr[i];
+        cin >> arr1[i];
     }
 
     int size2;
     cin >> size2;
 
-    int arr1[size2];
+    int arr2[size2];
     for (int i = 0; i < size2; ++i) {
-        cin >> arr1[i];
+        cin >> arr2[i];
     }
-    
-    cout << "Median = " << findMedian(arr, size1, arr1, size2) << endl;
 
+    cout << "Median = " << findMedian(arr1, size1, arr2, size2) << endl;
+    
     return 0;
 }
