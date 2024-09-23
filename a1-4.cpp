@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 // Function to find the median of two sorted arrays
@@ -86,6 +87,7 @@ double findMedian(int arr1[], int size1, int arr2[], int size2) {
 }
 
 int main() {
+    // Read input
     int size1;
     cin >> size1;
 
@@ -102,7 +104,17 @@ int main() {
         cin >> arr1[i];
     }
 
-    cout << "Median = " << findMedian(arr, size1, arr1, size2) << endl;
+    // Find the median
+    double median = findMedian(arr, size1, arr1, size2);
+
+    // Output the result to a file named "a1-4.out"
+    ofstream outFile("a1-4.out");
+    if (outFile.is_open()) {
+        outFile << "Median = " << median << endl;
+        outFile.close();
+    } else {
+        cerr << "Unable to open file" << endl;
+    }
 
     return 0;
 }
