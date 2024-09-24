@@ -3,9 +3,12 @@
 #include <cmath> // For std::nan
 
 using namespace std;
-//Hello world
+
 // Function to find the median of two sorted arrays
-double findMedian(int arr1[], int size1, int arr2[], int size2) {
+double findMedian(const vector<int>& arr1, const vector<int>& arr2) {
+    int size1 = arr1.size();
+    int size2 = arr2.size();
+
     // Handle the case when both arrays are empty
     if (size1 == 0 && size2 == 0) {
         cout << "Empty Array" << endl;
@@ -54,7 +57,7 @@ int main() {
     int size1;
     cin >> size1;
 
-    int arr1[size1];
+    vector<int> arr1(size1);
     for (int i = 0; i < size1; ++i) {
         cin >> arr1[i];
     }
@@ -62,12 +65,12 @@ int main() {
     int size2;
     cin >> size2;
 
-    int arr2[size2];
+    vector<int> arr2(size2);
     for (int i = 0; i < size2; ++i) {
         cin >> arr2[i];
     }
 
-    double median = findMedian(arr1, size1, arr2, size2);
+    double median = findMedian(arr1, arr2);
     if (!(size1 == 0 && size2 == 0)) {
         cout << "Median = " << median << endl;
     }
