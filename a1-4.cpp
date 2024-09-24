@@ -1,14 +1,19 @@
 #include <iostream>
-#include <algorithm> // For std::sort
+#include <vector>
+#include <algorithm> // For sort function
+#include <cmath> // For std::nan
 
 using namespace std;
 
 // Function to find the median of two sorted arrays
-double findMedian(int arr1[], int size1, int arr2[], int size2) {
+double findMedian(vector<int>& arr1, vector<int>& arr2) {
+    int size1 = arr1.size();
+    int size2 = arr2.size();
+
     // Handle the case when both arrays are empty
     if (size1 == 0 && size2 == 0) {
         cout << "Empty Array" << endl;
-        return NAN; // Return NaN for clarity
+        return std::nan(""); // Return NaN for clarity
     }
 
     // Handle the case when only one array is empty
@@ -24,7 +29,7 @@ double findMedian(int arr1[], int size1, int arr2[], int size2) {
     }
 
     // Merge arrays
-    int merged[size1 + size2];
+    vector<int> merged(size1 + size2);
     int i = 0, j = 0, k = 0;
 
     while (i < size1 && j < size2) {
@@ -53,7 +58,7 @@ int main() {
     int size1;
     cin >> size1;
 
-    int arr1[size1];
+    vector<int> arr1(size1);
     for (int i = 0; i < size1; ++i) {
         cin >> arr1[i];
     }
@@ -61,16 +66,16 @@ int main() {
     int size2;
     cin >> size2;
 
-    int arr2[size2];
+    vector<int> arr2(size2);
     for (int i = 0; i < size2; ++i) {
         cin >> arr2[i];
     }
 
-    // Sort the arrays
-    sort(arr1, arr1 + size1);
-    sort(arr2, arr2 + size2);
+    // Sort both arrays before finding the median
+    sort(arr1.begin(), arr1.end());
+    sort(arr2.begin(), arr2.end());
 
-    double median = findMedian(arr1, size1, arr2, size2);
+    double median = findMedian(arr1, arr2);
     if (!(size1 == 0 && size2 == 0)) {
         cout << "Median = " << median << endl;
     }
