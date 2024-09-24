@@ -3,7 +3,7 @@
 #include <cmath> // For std::nan
 
 using namespace std;
-
+//Hello world
 // Function to find the median of two sorted arrays
 double findMedian(int arr1[], int size1, int arr2[], int size2) {
     // Handle the case when both arrays are empty
