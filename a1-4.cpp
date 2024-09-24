@@ -54,26 +54,12 @@ double findMedian(const vector<int>& arr1, const vector<int>& arr2) {
 }
 
 int main() {
-    int size1, size2;
-
-    cout << "Enter size of first array: ";
-    cin >> size1;
-    vector<int> arr1(size1);
-    cout << "Enter elements of first array: ";
-    for (int i = 0; i < size1; ++i) {
-        cin >> arr1[i];
-    }
-
-    cout << "Enter size of second array: ";
-    cin >> size2;
-    vector<int> arr2(size2);
-    cout << "Enter elements of second array: ";
-    for (int i = 0; i < size2; ++i) {
-        cin >> arr2[i];
-    }
+    // Hard-coded input for the arrays
+    vector<int> arr1 = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39};
+    vector<int> arr2 = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30};
 
     double median = findMedian(arr1, arr2);
-    if (size1 != 0 || size2 != 0) {
+    if (!std::isnan(median)) {
         cout << "Median = " << median << endl;
     }
 
