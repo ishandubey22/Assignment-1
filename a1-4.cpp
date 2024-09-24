@@ -11,7 +11,7 @@ double findMedian(const vector<int>& arr1, const vector<int>& arr2) {
 
     // Handle the case when both arrays are empty
     if (size1 == 0 && size2 == 0) {
-        cout << "Empty Array" << endl;
+        cout << "Both arrays are empty." << endl;
         return std::nan(""); // Return NaN for clarity
     }
 
@@ -54,24 +54,26 @@ double findMedian(const vector<int>& arr1, const vector<int>& arr2) {
 }
 
 int main() {
-    int size1;
-    cin >> size1;
+    int size1, size2;
 
+    cout << "Enter size of first array: ";
+    cin >> size1;
     vector<int> arr1(size1);
+    cout << "Enter elements of first array: ";
     for (int i = 0; i < size1; ++i) {
         cin >> arr1[i];
     }
 
-    int size2;
+    cout << "Enter size of second array: ";
     cin >> size2;
-
     vector<int> arr2(size2);
+    cout << "Enter elements of second array: ";
     for (int i = 0; i < size2; ++i) {
         cin >> arr2[i];
     }
 
     double median = findMedian(arr1, arr2);
-    if (!(size1 == 0 && size2 == 0)) {
+    if (size1 != 0 || size2 != 0) {
         cout << "Median = " << median << endl;
     }
 
