@@ -1,5 +1,7 @@
 #include <iostream>
-#include <algorithm>
+#include <vector>
+#include <cmath> // For std::nan
+
 using namespace std;
 
 // Function to find the median of two sorted arrays
@@ -7,25 +9,23 @@ double findMedian(int arr1[], int size1, int arr2[], int size2) {
     // Handle the case when both arrays are empty
     if (size1 == 0 && size2 == 0) {
         cout << "Empty Array" << endl;
-        return 0;
+        return std::nan(""); // Return NaN for clarity
     }
 
     // Handle the case when only one array is empty
     if (size1 == 0) {
-        if (size2 % 2 == 0)
-            return (arr2[size2 / 2 - 1] + arr2[size2 / 2]) / 2.0;
-        else
-            return arr2[size2 / 2];
+        return (size2 % 2 == 0)
+            ? (arr2[size2 / 2 - 1] + arr2[size2 / 2]) / 2.0
+            : arr2[size2 / 2];
     }
     if (size2 == 0) {
-        if (size1 % 2 == 0)
-            return (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0;
-        else
-            return arr1[size1 / 2];
+        return (size1 % 2 == 0)
+            ? (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0
+            : arr1[size1 / 2];
     }
 
     // Merge arrays
-    int merged[size1 + size2];
+    vector<int> merged(size1 + size2);
     int i = 0, j = 0, k = 0;
 
     while (i < size1 && j < size2) {
@@ -57,11 +57,6 @@ int main() {
     int arr1[size1];
     for (int i = 0; i < size1; ++i) {
         cin >> arr1[i];
-        // Validate input to prevent negative numbers
-        if (arr1[i] < 0) {
-            cout << "Error: Negative numbers are not allowed." << endl;
-            return 1;
-        }
     }
 
     int size2;
@@ -70,11 +65,6 @@ int main() {
     int arr2[size2];
     for (int i = 0; i < size2; ++i) {
         cin >> arr2[i];
-        // Validate input to prevent negative numbers
-        if (arr2[i] < 0) {
-            cout << "Error: Negative numbers are not allowed." << endl;
-            return 1;
-        }
     }
 
     double median = findMedian(arr1, size1, arr2, size2);
