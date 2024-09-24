@@ -72,5 +72,4 @@ int main() {
         cout << "Median = " << median << endl;
     }
 
-    return 0;
-}
+    return 0;}
