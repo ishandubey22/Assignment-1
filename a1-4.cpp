@@ -1,11 +1,13 @@
+
+
 #include <iostream>
 #include <vector>
-#include <algorithm> 
-#include <limits>    
+#include <algorithm> // For std::swap
+#include <limits>    // For handling infinity values
 
 using namespace std;
 
-// Function partition the array
+// Utility function to partition the array
 int partition(vector<int>& arr, int low, int high) {
     int pivot = arr[high]; // Choose the last element as pivot
     int i = low;           // Index for smaller element
@@ -38,41 +40,45 @@ int quickSelect(vector<int>& arr, int low, int high, int k) {
     }
 }
 
-// find median in 2 unsorted arrays using Quickselect
-double findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr2) {
+// Function to find the median in two unsorted arrays using Quickselect
+bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr2, double& median) {
     int size1 = arr1.size();
     int size2 = arr2.size();
 
     // Handle case when both arrays are empty
     if (size1 == 0 && size2 == 0) {
-        cout << "Empty Array" << endl;
-        return 0.0; //for invalid input
+        cout << "Both arrays are empty. No median available." << endl;
+        return false; // Indicate failure to calculate median
     }
 
     // If one array is empty, simply find the median of the other array
     if (size1 == 0) {
-        return size2 % 2 == 0 ? (arr2[size2 / 2 - 1] + arr2[size2 / 2]) / 2.0 : arr2[size2 / 2];
+        median = size2 % 2 == 0 ? (arr2[size2 / 2 - 1] + arr2[size2 / 2]) / 2.0 : arr2[size2 / 2];
+        return true;
     }
     if (size2 == 0) {
-        return size1 % 2 == 0 ? (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0 : arr1[size1 / 2];
+        median = size1 % 2 == 0 ? (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0 : arr1[size1 / 2];
+        return true;
     }
 
-    // Merge botj the two arrays
+    // Merge the two arrays
     vector<int> mergedArr = arr1;
     mergedArr.insert(mergedArr.end(), arr2.begin(), arr2.end());
 
     int totalSize = mergedArr.size();
     int medianPos = (totalSize - 1) / 2;
 
-    // If total number of elements is odd, we return the middle element
+    // If the total number of elements is odd, we return the middle element
     if (totalSize % 2 != 0) {
-        return quickSelect(mergedArr, 0, totalSize - 1, medianPos);
+        median = quickSelect(mergedArr, 0, totalSize - 1, medianPos);
     } else {
         // If even, we need to find the average of the two middle elements
         int leftMedian = quickSelect(mergedArr, 0, totalSize - 1, medianPos);
         int rightMedian = quickSelect(mergedArr, 0, totalSize - 1, medianPos + 1);
-        return (leftMedian + rightMedian) / 2.0;
+        median = (leftMedian + rightMedian) / 2.0;
     }
+
+    return true; // Indicate success in calculating median
 }
 
 int main() {
@@ -92,8 +98,11 @@ int main() {
         cin >> arr2[i];
     }
 
-    double median = findMedianTwoUnsortedArrays(arr1, arr2);
-    cout << "Median = " << median << endl;
+    double median;
+    if (findMedianTwoUnsortedArrays(arr1, arr2, median)) {
+        cout << "Median = " << median << endl;
+    }
 
     return 0;
 }
+
