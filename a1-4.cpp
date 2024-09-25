@@ -1,11 +1,11 @@
 #include <iostream>
 #include <vector>
-#include <algorithm> 
-#include <limits>    
+#include <algorithm>
+#include <limits>
 
 using namespace std;
 
-// Function to partition the array for Median of Medians
+// Function to partition the array for QuickSelect
 int partition(vector<int>& arr, int low, int high, int pivot) {
     while (low <= high) {
         while (arr[low] < pivot) low++;
@@ -37,7 +37,7 @@ int medianOfMedians(vector<int>& arr, int low, int high, int k) {
         int subHigh = i + 4 > high ? high : i + 4;
         sort(arr.begin() + i, arr.begin() + subHigh + 1);
         int median = arr[i + (subHigh - i) / 2];
-        swap(arr[low + (i / 5)], median);
+        swap(arr[low + (i - low) / 5], arr[i + (subHigh - i) / 2]);
     }
 
     return medianOfMedians(arr, low, low + (high - low) / 5, (high - low) / 10);
@@ -45,15 +45,16 @@ int medianOfMedians(vector<int>& arr, int low, int high, int k) {
 
 // Quickselect function to find the k-th smallest element in the array (median of medians improves quickselect's worst case from n^2 to n)
 int quickSelect(vector<int>& arr, int low, int high, int k) {
+    if (low == high)
+        return arr[low];
+
     int pivot = medianOfMedians(arr, low, high, (high - low) / 2);
     int partitionIndex = partition(arr, low, high, pivot);
 
     if (k < partitionIndex) {
         return quickSelect(arr, low, partitionIndex - 1, k);
-    } else if (k > partitionIndex) {
-        return quickSelect(arr, partitionIndex, high, k);
     } else {
-        return arr[partitionIndex - 1]; // Return the k-th smallest element
+        return quickSelect(arr, partitionIndex, high, k);
     }
 }
 
@@ -75,28 +76,6 @@ bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr
     }
     if (size2 == 0) {
         median = size1 % 2 == 0 ? (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0 : arr1[size1 / 2];
-        return true;
-    }
-
-    // Check if all elements in arr1 are less than all in arr2
-    if (arr1[size1 - 1] < arr2[0]) {
-        // arr1 is completely less than arr2
-        if ((size1 + size2) % 2 == 0) {
-            median = (arr2[(size2 - 1) / 2] + arr2[size2 / 2]) / 2.0;
-        } else {
-            median = arr2[(size1 + size2) / 2];
-        }
-        return true;
-    }
-
-    // Check if all elements in arr2 are less than all in arr1
-    if (arr2[size2 - 1] < arr1[0]) {
-        // arr2 is completely less than arr1
-        if ((size1 + size2) % 2 == 0) {
-            median = (arr1[(size1 - 1) / 2] + arr1[size1 / 2]) / 2.0;
-        } else {
-            median = arr1[(size1 + size2) / 2];
-        }
         return true;
     }
 
