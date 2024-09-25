@@ -9,10 +9,19 @@ double findMedianBinarySearch(const vector<int>& arr1, const vector<int>& arr2) 
     int size1 = arr1.size();
     int size2 = arr2.size();
 
-    // Handle case when both arrays are empty
-    if (size1 == 0 && size2 == 0) {
-        cout << "Empty Array" << endl;
-        return numeric_limits<double>::quiet_NaN(); // Return NaN for invalid input
+    // Handle case when one array is empty
+    if (size1 == 0) {
+        if (size2 == 0) {
+            cout << "Empty Array" << endl;
+            return numeric_limits<double>::quiet_NaN(); // Return NaN for invalid input
+        }
+        // If arr1 is empty, return the median of arr2
+        return size2 % 2 == 0 ? (arr2[size2 / 2 - 1] + arr2[size2 / 2]) / 2.0 : arr2[size2 / 2];
+    }
+
+    if (size2 == 0) {
+        // If arr2 is empty, return the median of arr1
+        return size1 % 2 == 0 ? (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0 : arr1[size1 / 2];
     }
 
     // Ensure arr1 is the smaller array to minimize search space
@@ -66,12 +75,6 @@ int main() {
     vector<int> arr2(size2);
     for (int i = 0; i < size2; ++i) {
         cin >> arr2[i];
-    }
-
-    // Check if both arrays are empty
-    if (size1 == 0 && size2 == 0) {
-        cout << "Empty Array" << endl;
-        return 0;
     }
 
     try {
