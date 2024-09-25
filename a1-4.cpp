@@ -1,11 +1,10 @@
 #include <iostream>
 #include <vector>
-#include <algorithm> // For std::sort
-#include <limits>    // For handling infinity values
+#include <limits> // For handling infinity values
 
 using namespace std;
 
-// Function using binary search for time complexity
+// Function to find the median of two sorted arrays using binary search
 double findMedianBinarySearch(const vector<int>& arr1, const vector<int>& arr2) {
     int size1 = arr1.size();
     int size2 = arr2.size();
@@ -69,9 +68,11 @@ int main() {
         cin >> arr2[i];
     }
 
-    // Sort the arrays before finding the median
-    sort(arr1.begin(), arr1.end());
-    sort(arr2.begin(), arr2.end());
+    // Check if both arrays are empty
+    if (size1 == 0 && size2 == 0) {
+        cout << "Empty Array" << endl;
+        return 0;
+    }
 
     try {
         double median = findMedianBinarySearch(arr1, arr2);
