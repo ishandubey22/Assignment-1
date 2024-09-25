@@ -46,7 +46,7 @@ double findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& a
     // Handle case when both arrays are empty
     if (size1 == 0 && size2 == 0) {
         cout << "Empty Array" << endl;
-        return; //for invalid input
+        return 0.0; //for invalid input
     }
 
     // If one array is empty, simply find the median of the other array
