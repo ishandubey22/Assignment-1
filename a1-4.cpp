@@ -78,47 +78,4 @@ bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr
         return true;
     }
 
-    // Merge the two arrays
-    vector<int> mergedArr = arr1;
-    mergedArr.insert(mergedArr.end(), arr2.begin(), arr2.end());
-
-    int totalSize = mergedArr.size();
-    int medianPos = (totalSize - 1) / 2;
-
-    // If the total number of elements is odd, we return the middle element
-    if (totalSize % 2 != 0) {
-        median = quickSelect(mergedArr, 0, totalSize - 1, medianPos);
-    } else {
-        // If even, we need to find the average of the two middle elements
-        int leftMedian = quickSelect(mergedArr, 0, totalSize - 1, medianPos);
-        int rightMedian = quickSelect(mergedArr, 0, totalSize - 1, medianPos + 1);
-        median = (leftMedian + rightMedian) / 2.0;
-    }
-
-    return true; // Indicate success in calculating median
-}
-
-int main() {
-    int size1;
-    cin >> size1;
-
-    vector<int> arr1(size1);
-    for (int i = 0; i < size1; ++i) {
-        cin >> arr1[i];
-    }
-
-    int size2;
-    cin >> size2;
-
-    vector<int> arr2(size2);
-    for (int i = 0; i < size2; ++i) {
-        cin >> arr2[i];
-    }
-
-    double median;
-    if (findMedianTwoUnsortedArrays(arr1, arr2, median)) {
-        cout << "Median = " << median << endl;
-    }
-
-    return 0;
-}
+    // Merge the two arra
