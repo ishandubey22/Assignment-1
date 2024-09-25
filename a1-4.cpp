@@ -5,7 +5,7 @@
 
 using namespace std;
 
-// Function to partition the array for QuickSelect
+//partitioning for quickselect
 int partition(vector<int>& arr, int low, int high, int pivot) {
     while (low <= high) {
         while (arr[low] < pivot) low++;
@@ -19,14 +19,14 @@ int partition(vector<int>& arr, int low, int high, int pivot) {
     return low;
 }
 
-// Function to find the median of an array
+// finding the median, self-explanatory i believe
 double findMedian(vector<int>& arr) {
     int n = arr.size();
     sort(arr.begin(), arr.end());
     return n % 2 == 0 ? (arr[n / 2 - 1] + arr[n / 2]) / 2.0 : arr[n / 2];
 }
 
-// Median of Medians algorithm to find the k-th smallest element
+// Median of Medians (sounds way too grand ngl) algorithm to optimise da quickselect algorithm.
 int medianOfMedians(vector<int>& arr, int low, int high, int k) {
     if (high - low < 5) {
         sort(arr.begin() + low, arr.begin() + high + 1);
@@ -43,7 +43,7 @@ int medianOfMedians(vector<int>& arr, int low, int high, int k) {
     return medianOfMedians(arr, low, low + (high - low) / 5, (high - low) / 10);
 }
 
-// Quickselect function to find the k-th smallest element in the array (median of medians improves quickselect's worst case from n^2 to n)
+//the good old quickselect algorithm (inspired from geeks for geeks). (median of medians improves quickselect's worst case from n^2 to n)
 int quickSelect(vector<int>& arr, int low, int high, int k) {
     if (low == high)
         return arr[low];
@@ -58,18 +58,18 @@ int quickSelect(vector<int>& arr, int low, int high, int k) {
     }
 }
 
-// Function to find the median in two unsorted arrays using Median of Medians
+// one more function for the heck of it at this point (not really, this is the magical one)
 bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr2, double& median) {
     int size1 = arr1.size();
     int size2 = arr2.size();
 
-    // Handle case when both arrays are empty
+    // edge case when both arrays empty
     if (size1 == 0 && size2 == 0) {
         cout << "Empty Array" << endl;
-        return false; // Indicate failure to calculate median
+        return false; // failure to calculate median
     }
 
-    // If one array is empty, simply find the median of the other array
+    // If one array is empty, ze function will simply find the median of other array
     if (size1 == 0) {
         median = size2 % 2 == 0 ? (arr2[size2 / 2 - 1] + arr2[size2 / 2]) / 2.0 : arr2[size2 / 2];
         return true;
@@ -79,24 +79,25 @@ bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr
         return true;
     }
 
-    // Merge the two arrays
+    // merging da arrays
     vector<int> mergedArr = arr1;
     mergedArr.insert(mergedArr.end(), arr2.begin(), arr2.end());
 
     int totalSize = mergedArr.size();
     int medianPos = (totalSize - 1) / 2;
 
-    // If the total number of elements is odd, we return the middle element
+    // if total no. of elements = odd, return middle element
     if (totalSize % 2 != 0) {
         median = quickSelect(mergedArr, 0, totalSize - 1, medianPos);
     } else {
-        // If even, we need to find the average of the two middle elements
+        // if even, find avg. of two middle elements
         int leftMedian = quickSelect(mergedArr, 0, totalSize - 1, medianPos);
         int rightMedian = quickSelect(mergedArr, 0, totalSize - 1, medianPos + 1);
         median = (leftMedian + rightMedian) / 2.0;
     }
 
-    return true; // Indicate success in calculating median
+    return true; // success in calculating median! 
+    //Imagine my shock after a HUNDRED lines of code (im pretty sure we could do it a simpler way but im way too exhausted to try)! T T
 }
 
 int main() {
