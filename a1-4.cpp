@@ -12,6 +12,18 @@ double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
     int x = nums1.size();
     int y = nums2.size();
 
+    // Handle edge cases
+    if (x == 0 && y == 0) {
+        cout << "Empty Array" << endl;
+        return std::nan("");
+    }
+    if (x == 0) {
+        return (y % 2 == 0) ? (nums2[y/2 - 1] + nums2[y/2]) / 2.0 : nums2[y/2];
+    }
+    if (y == 0) {
+        return (x % 2 == 0) ? (nums1[x/2 - 1] + nums1[x/2]) / 2.0 : nums1[x/2];
+    }
+
     int low = 0;
     int high = x;
 
@@ -42,25 +54,28 @@ double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
 }
 
 int main() {
-    int n, m;
-    cout << "Enter the size of the first array: ";
-    cin >> n;
-    vector<int> nums1(n);
-    cout << "Enter the elements of the first array: ";
-    for (int i = 0; i < n; i++) {
-        cin >> nums1[i];
+    int size1;
+    cin >> size1;
+
+    vector<int> arr1(size1);
+    for (int i = 0; i < size1; ++i) {
+        cin >> arr1[i];
     }
 
-    cout << "Enter the size of the second array: ";
-    cin >> m;
-    vector<int> nums2(m);
-    cout << "Enter the elements of the second array: ";
-    for (int i = 0; i < m; i++) {
-        cin >> nums2[i];
+    int size2;
+    cin >> size2;
+
+    vector<int> arr2(size2);
+    for (int i = 0; i < size2; ++i) {
+        cin >> arr2[i];
     }
 
-    double median = findMedianSortedArrays(nums1, nums2);
-    cout << "Median: " << median << endl;
+    // We assume the input arrays are already sorted
+
+    double median = findMedianSortedArrays(arr1, arr2);
+    if (!(size1 == 0 && size2 == 0)) {
+        cout << "Median = " << median << endl;
+    }
 
     return 0;
 }
