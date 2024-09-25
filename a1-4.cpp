@@ -1,83 +1,66 @@
 #include <iostream>
 #include <vector>
-#include <algorithm> // For sort function
-#include <cmath> // For std::nan
+#include <algorithm>
+#include <cmath>
 
 using namespace std;
 
-// our function to find median of two sorted arrays
-double findMedian(vector<int>& arr1, vector<int>& arr2) {
-    int size1 = arr1.size();
-    int size2 = arr2.size();
-
-    // edge case: both arrays are empty
-    if (size1 == 0 && size2 == 0) {
-        cout << "Empty Array" << endl;
-        return std::nan(""); // Return NaN for clarity
+double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+    if (nums1.size() > nums2.size()) {
+        return findMedianSortedArrays(nums2, nums1);
     }
+    int x = nums1.size();
+    int y = nums2.size();
 
-    // the case when only 1 array is empty
-    if (size1 == 0) {
-        return (size2 % 2 == 0)
-            ? (arr2[size2 / 2 - 1] + arr2[size2 / 2]) / 2.0
-            : arr2[size2 / 2];
-    }
-    if (size2 == 0) {
-        return (size1 % 2 == 0)
-            ? (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0
-            : arr1[size1 / 2];
-    }
+    int low = 0;
+    int high = x;
 
-    // Merge arrays
-    vector<int> merged(size1 + size2);
-    int i = 0, j = 0, k = 0;
+    while (low <= high) {
+        int partitionX = (low + high) / 2;
+        int partitionY = (x + y + 1) / 2 - partitionX;
 
-    while (i < size1 && j < size2) {
-        if (arr1[i] <= arr2[j]) {
-            merged[k++] = arr1[i++];
+        int maxLeftX = (partitionX == 0) ? INT_MIN : nums1[partitionX - 1];
+        int minRightX = (partitionX == x) ? INT_MAX : nums1[partitionX];
+
+        int maxLeftY = (partitionY == 0) ? INT_MIN : nums2[partitionY - 1];
+        int minRightY = (partitionY == y) ? INT_MAX : nums2[partitionY];
+
+        if (maxLeftX <= minRightY && maxLeftY <= minRightX) {
+            if ((x + y) % 2 == 0) {
+                return (max(maxLeftX, maxLeftY) + min(minRightX, minRightY)) / 2.0;
+            } else {
+                return max(maxLeftX, maxLeftY);
+            }
+        } else if (maxLeftX > minRightY) {
+            high = partitionX - 1;
         } else {
-            merged[k++] = arr2[j++];
+            low = partitionX + 1;
         }
     }
-    while (i < size1) {
-        merged[k++] = arr1[i++];
-    }
-    while (j < size2) {
-        merged[k++] = arr2[j++];
-    }
 
-    int totalSize = size1 + size2;
-    if (totalSize % 2 == 0) {
-        return (merged[totalSize / 2 - 1] + merged[totalSize / 2]) / 2.0;
-    } else {
-        return merged[totalSize / 2];
-    }
+    throw invalid_argument("Input arrays are not sorted.");
 }
 
 int main() {
-    int size1;
-    cin >> size1;
-
-    vector<int> arr1(size1);
-    for (int i = 0; i < size1; ++i) {
-        cin >> arr1[i];
+    int n, m;
+    cout << "Enter the size of the first array: ";
+    cin >> n;
+    vector<int> nums1(n);
+    cout << "Enter the elements of the first array: ";
+    for (int i = 0; i < n; i++) {
+        cin >> nums1[i];
     }
 
-    int size2;
-    cin >> size2;
+    cout << "Enter the size of the second array: ";
+    cin >> m;
+    vector<int> nums2(m);
+    cout << "Enter the elements of the second array: ";
+    for (int i = 0; i < m; i++) {
+        cin >> nums2[i];
+    }
 
-    vector<int> arr2(size2);
-    for (int i = 0; i < size2; ++i) {
-        cin >> arr2[i];
-    }
-    // Order the arrays in ascending order, so that our function doesn't have to deal with an unordered array.
-    sort(arr1.begin(), arr1.end());
-    sort(arr2.begin(), arr2.end());
-    
-    double median = findMedian(arr1, arr2);
-    if (!(size1 == 0 && size2 == 0)) {
-        cout << "Median = " << median << endl;
-    }
+    double median = findMedianSortedArrays(nums1, nums2);
+    cout << "Median: " << median << endl;
 
     return 0;
 }
