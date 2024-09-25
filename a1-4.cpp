@@ -1,82 +1,84 @@
 #include <iostream>
+#include <vector>
+#include <algorithm> // For sort function
+#include <cmath> // For std::nan
 
 using namespace std;
 
-//write your code here
-
 // Function to find the median of two sorted arrays
-double findMedian(int arr1[], int size1, int arr2[], int size2) {
+double findMedian(vector<int>& arr1, vector<int>& arr2) {
+    int size1 = arr1.size();
+    int size2 = arr2.size();
+
+    // Handle the case when both arrays are empty
+    if (size1 == 0 && size2 == 0) {
+        cout << "Empty Array" << endl;
+        return std::nan(""); // Return NaN for clarity
+    }
+
+    // Handle the case when only one array is empty
+    if (size1 == 0) {
+        return (size2 % 2 == 0)
+            ? (arr2[size2 / 2 - 1] + arr2[size2 / 2]) / 2.0
+            : arr2[size2 / 2];
+    }
+    if (size2 == 0) {
+        return (size1 % 2 == 0)
+            ? (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0
+            : arr1[size1 / 2];
+    }
+
+    // Merge arrays
+    vector<int> merged(size1 + size2);
+    int i = 0, j = 0, k = 0;
+
+    while (i < size1 && j < size2) {
+        if (arr1[i] <= arr2[j]) {
+            merged[k++] = arr1[i++];
+        } else {
+            merged[k++] = arr2[j++];
+        }
+    }
+    while (i < size1) {
+        merged[k++] = arr1[i++];
+    }
+    while (j < size2) {
+        merged[k++] = arr2[j++];
+    }
+
     int totalSize = size1 + size2;
-    int mergedIndex = 0;
-    int median1 = 0, median2 = 0;
-    int i = 0, j = 0;
-
-    // Merge elements from two sorted arrays until we reach the middle of the combined array
-for (mergedIndex = 0; mergedIndex <= totalSize / 2; mergedIndex++) {
-    // Store the previous median value before updating it
-    median1 = median2;
-
-    // Check if we have more elements in arr1 and either arr2 is empty 
-    // or the current element in arr1 is less than or equal to the current element in arr2
-    if (i < size1 && (j >= size2 || arr1[i] <= arr2[j])) {
-        // Take the next element from arr1 and move to the next index
-        median2 = arr1[i++];
+    if (totalSize % 2 == 0) {
+        return (merged[totalSize / 2 - 1] + merged[totalSize / 2]) / 2.0;
     } else {
-        // Otherwise, take the next element from arr2 and move to the next index
-        median2 = arr2[j++];
+        return merged[totalSize / 2];
     }
 }
-
-    // If the total number of elements is odd, return the single middle element
-    if (totalSize % 2 == 1) {
-        return median2;
-    } 
-    // If the total number of elements is even, return the average of the two middle elements
-    else {
-        return (median1 + median2) / 2.0;
-    }
-
-}
-
 
 int main() {
-    // You can use cout statements, but ensure that you submit after commenting them out, as the autograder will otherwise mistake it for your actual output
-    // Everything else in the main function remains unchanged
-    
     int size1;
-     cout << "Enter the size of the array1: ";
     cin >> size1;
 
-    int arr[size1];
-    // cout << "Enter " << size1 << " elements:" << endl;
+    vector<int> arr1(size1);
     for (int i = 0; i < size1; ++i) {
-        cin >> arr[i];
-    }
-
-     cout << "The array elements are: ";
-    // for (int i = 0; i < size1; ++i) {
-    //     cout << arr[i] << " ";
-    // }
-    // cout << endl;
-
-    int size2;
-     cout << "Enter the size of the array2: ";
-    cin >> size2;
-
-    int arr1[size2];
-    // cout << "Enter " << size2 << " elements:" << endl;
-    for (int i = 0; i < size2; ++i) {
         cin >> arr1[i];
     }
 
-    // cout << "The array elements are: ";
-    // for (int i = 0; i < size2; ++i) {
-    //     cout << arr1[i] << " ";
-    // }
-    // cout << endl;
-    
-    cout << "Median = " << findMedian(arr, size1, arr1, size2) << endl; // do not comment this out
-    
+    int size2;
+    cin >> size2;
+
+    vector<int> arr2(size2);
+    for (int i = 0; i < size2; ++i) {
+        cin >> arr2[i];
+    }
+
+    // Sort both arrays before finding the median
+    sort(arr1.begin(), arr1.end());
+    sort(arr2.begin(), arr2.end());
+
+    double median = findMedian(arr1, arr2);
+    if (!(size1 == 0 && size2 == 0)) {
+        cout << "Median = " << median << endl;
+    }
+
     return 0;
 }
-
