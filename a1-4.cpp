@@ -88,7 +88,7 @@ bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr
 
     // If the total number of elements is odd, we return the middle element
     if (totalSize % 2 != 0) {
-        median = quickSelect(mergedArr, 0, totalSize, medianPos);
+        median = quickSelect(mergedArr, 0, totalSize - 2, medianPos);
     } else {
         // If even, we need to find the average of the two middle elements
         int leftMedian = quickSelect(mergedArr, 0, totalSize - 1, medianPos);
