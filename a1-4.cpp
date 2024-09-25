@@ -58,7 +58,8 @@ int quickSelect(vector<int>& arr, int low, int high, int k) {
     }
 }
 
-// fn to find the median in two unsorted arrays using Median of Medians
+
+
 bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr2, double& median) {
     int size1 = arr1.size();
     int size2 = arr2.size();
@@ -79,11 +80,18 @@ bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr
         return true;
     }
 
-    // Merge the two arrays
-    vector<int> mergedArr = arr1;
-    mergedArr.insert(mergedArr.end(), arr2.begin(), arr2.end());
+    // Always work with the smaller array first
+    const vector<int>* smallerArr = &arr1;
+    const vector<int>* largerArr = &arr2;
+    if (size1 > size2) {
+        swap(smallerArr, largerArr);
+    }
 
-   int totalSize = mergedArr.size();
+    // Merge the two arrays
+    vector<int> mergedArr = *smallerArr;
+    mergedArr.insert(mergedArr.end(), largerArr->begin(), largerArr->end());
+
+    int totalSize = mergedArr.size();
     int medianPos = (totalSize - 1) / 2;
 
     // If the total number of elements is odd, we return the middle element
@@ -98,6 +106,8 @@ bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr
 
     return true; // Indicate success in calculating median
 }
+
+
 int main() {
     int size1;
     cin >> size1;
