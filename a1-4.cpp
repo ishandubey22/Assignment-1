@@ -5,7 +5,7 @@
 
 using namespace std;
 
-// fn to partition the array for Median of Medians
+// Function to partition the array for Median of Medians
 int partition(vector<int>& arr, int low, int high, int pivot) {
     while (low <= high) {
         while (arr[low] < pivot) low++;
@@ -57,7 +57,7 @@ int quickSelect(vector<int>& arr, int low, int high, int k) {
     }
 }
 
-// fn to find the median in two unsorted arrays using Median of Medians
+// Function to find the median in two unsorted arrays using Median of Medians
 bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr2, double& median) {
     int size1 = arr1.size();
     int size2 = arr2.size();
