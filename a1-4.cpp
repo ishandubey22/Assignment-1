@@ -1,12 +1,12 @@
 
 #include <iostream>
 #include <vector>
-#include <algorithm> // For std::swap
-#include <limits>    // For handling infinity values
+#include <algorithm> 
+#include <limits>    
 
 using namespace std;
 
-// Utility function to partition the array for Median of Medians
+// fn to partition the array for Median of Medians
 int partition(vector<int>& arr, int low, int high, int pivot) {
     while (low <= high) {
         while (arr[low] < pivot) low++;
@@ -44,7 +44,7 @@ int medianOfMedians(vector<int>& arr, int low, int high, int k) {
     return medianOfMedians(arr, low, low + (high - low) / 5, (high - low) / 10);
 }
 
-// Quickselect function to find the k-th smallest element in the array
+// Quickselect function to find the k-th smallest element in the array (median of medians improves quickselects worst case frrom n^2 to n)
 int quickSelect(vector<int>& arr, int low, int high, int k) {
     int pivot = medianOfMedians(arr, low, high, (high - low) / 2);
     int partitionIndex = partition(arr, low, high, pivot);
@@ -58,7 +58,7 @@ int quickSelect(vector<int>& arr, int low, int high, int k) {
     }
 }
 
-// Function to find the median in two unsorted arrays using Median of Medians
+// fn to find the median in two unsorted arrays using Median of Medians
 bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr2, double& median) {
     int size1 = arr1.size();
     int size2 = arr2.size();
@@ -88,7 +88,7 @@ bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr
 
     // If the total number of elements is odd, we return the middle element
     if (totalSize % 2 != 0) {
-        median = quickSelect(mergedArr, 0, totalSize - 1, medianPos);
+        median = quickSelect(mergedArr, 0, totalSize, medianPos);
     } else {
         // If even, we need to find the average of the two middle elements
         int leftMedian = quickSelect(mergedArr, 0, totalSize - 1, medianPos);
