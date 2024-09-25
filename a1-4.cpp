@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <vector>
 #include <algorithm> 
@@ -44,7 +43,7 @@ int medianOfMedians(vector<int>& arr, int low, int high, int k) {
     return medianOfMedians(arr, low, low + (high - low) / 5, (high - low) / 10);
 }
 
-// Quickselect function to find the k-th smallest element in the array (median of medians improves quickselects worst case frrom n^2 to n)
+// Quickselect function to find the k-th smallest element in the array (median of medians improves quickselect's worst case from n^2 to n)
 int quickSelect(vector<int>& arr, int low, int high, int k) {
     int pivot = medianOfMedians(arr, low, high, (high - low) / 2);
     int partitionIndex = partition(arr, low, high, pivot);
@@ -57,6 +56,7 @@ int quickSelect(vector<int>& arr, int low, int high, int k) {
         return arr[partitionIndex - 1]; // Return the k-th smallest element
     }
 }
+
 // fn to find the median in two unsorted arrays using Median of Medians
 bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr2, double& median) {
     int size1 = arr1.size();
@@ -78,11 +78,33 @@ bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr
         return true;
     }
 
+    // Check if all elements in arr1 are less than all in arr2
+    if (arr1[size1 - 1] < arr2[0]) {
+        // arr1 is completely less than arr2
+        if ((size1 + size2) % 2 == 0) {
+            median = (arr2[(size2 - 1) / 2] + arr2[size2 / 2]) / 2.0;
+        } else {
+            median = arr2[(size1 + size2) / 2];
+        }
+        return true;
+    }
+
+    // Check if all elements in arr2 are less than all in arr1
+    if (arr2[size2 - 1] < arr1[0]) {
+        // arr2 is completely less than arr1
+        if ((size1 + size2) % 2 == 0) {
+            median = (arr1[(size1 - 1) / 2] + arr1[size1 / 2]) / 2.0;
+        } else {
+            median = arr1[(size1 + size2) / 2];
+        }
+        return true;
+    }
+
     // Merge the two arrays
     vector<int> mergedArr = arr1;
     mergedArr.insert(mergedArr.end(), arr2.begin(), arr2.end());
 
-   int totalSize = mergedArr.size();
+    int totalSize = mergedArr.size();
     int medianPos = (totalSize - 1) / 2;
 
     // If the total number of elements is odd, we return the middle element
@@ -96,7 +118,6 @@ bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr
     }
 
     return true; // Indicate success in calculating median
-    
 }
 
 int main() {
