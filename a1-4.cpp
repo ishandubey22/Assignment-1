@@ -1,11 +1,11 @@
 #include <iostream>
 #include <vector>
-#include <algorithm> // For std::swap
-#include <limits>    // For handling infinity values
+#include <algorithm> 
+#include <limits>    
 
 using namespace std;
 
-// Utility function to partition the array
+// Function partition the array
 int partition(vector<int>& arr, int low, int high) {
     int pivot = arr[high]; // Choose the last element as pivot
     int i = low;           // Index for smaller element
@@ -38,7 +38,7 @@ int quickSelect(vector<int>& arr, int low, int high, int k) {
     }
 }
 
-// Function to find the median in two unsorted arrays using Quickselect
+// find median in 2 unsorted arrays using Quickselect
 double findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr2) {
     int size1 = arr1.size();
     int size2 = arr2.size();
@@ -46,7 +46,7 @@ double findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& a
     // Handle case when both arrays are empty
     if (size1 == 0 && size2 == 0) {
         cout << "Empty Array" << endl;
-        return numeric_limits<double>::quiet_NaN(); // Return NaN for invalid input
+        return; //for invalid input
     }
 
     // If one array is empty, simply find the median of the other array
@@ -57,14 +57,14 @@ double findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& a
         return size1 % 2 == 0 ? (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0 : arr1[size1 / 2];
     }
 
-    // Merge the two arrays
+    // Merge botj the two arrays
     vector<int> mergedArr = arr1;
     mergedArr.insert(mergedArr.end(), arr2.begin(), arr2.end());
 
     int totalSize = mergedArr.size();
     int medianPos = (totalSize - 1) / 2;
 
-    // If the total number of elements is odd, we return the middle element
+    // If total number of elements is odd, we return the middle element
     if (totalSize % 2 != 0) {
         return quickSelect(mergedArr, 0, totalSize - 1, medianPos);
     } else {
