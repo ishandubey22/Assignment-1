@@ -1,54 +1,57 @@
 #include <iostream>
 #include <vector>
-#include <limits> // For handling infinity values
+#include <algorithm> // For sort function
+#include <cmath> // For std::nan
 
 using namespace std;
 
-// Function to find the median of two sorted arrays using binary search
-double findMedianBinarySearch(const vector<int>& arr1, const vector<int>& arr2) {
+// Function to find the median of two sorted arrays
+double findMedian(vector<int>& arr1, vector<int>& arr2) {
     int size1 = arr1.size();
     int size2 = arr2.size();
 
-    // Handle case when both arrays are empty
+    // Handle the case when both arrays are empty
     if (size1 == 0 && size2 == 0) {
         cout << "Empty Array" << endl;
-        return numeric_limits<double>::quiet_NaN(); // Return NaN for invalid input
+        return std::nan(""); // Return NaN for clarity
     }
 
-    // Ensure arr1 is the smaller array to minimize search space
-    if (size1 > size2) {
-        return findMedianBinarySearch(arr2, arr1);
+    // Handle the case when only one array is empty
+    if (size1 == 0) {
+        return (size2 % 2 == 0)
+            ? (arr2[size2 / 2 - 1] + arr2[size2 / 2]) / 2.0
+            : arr2[size2 / 2];
+    }
+    if (size2 == 0) {
+        return (size1 % 2 == 0)
+            ? (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0
+            : arr1[size1 / 2];
     }
 
-    int low = 0, high = size1;
-    int halfLength = (size1 + size2 + 1) / 2;
+    // Merge arrays
+    vector<int> merged(size1 + size2);
+    int i = 0, j = 0, k = 0;
 
-    while (low <= high) {
-        int partition1 = (low + high) / 2;
-        int partition2 = halfLength - partition1;
-
-        // Handle boundaries
-        int maxLeft1 = (partition1 == 0) ? numeric_limits<int>::min() : arr1[partition1 - 1];
-        int minRight1 = (partition1 == size1) ? numeric_limits<int>::max() : arr1[partition1];
-
-        int maxLeft2 = (partition2 == 0) ? numeric_limits<int>::min() : arr2[partition2 - 1];
-        int minRight2 = (partition2 == size2) ? numeric_limits<int>::max() : arr2[partition2];
-
-        // Check for correct partition
-        if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1) {
-            if ((size1 + size2) % 2 == 0) {
-                return (max(maxLeft1, maxLeft2) + min(minRight1, minRight2)) / 2.0;
-            } else {
-                return max(maxLeft1, maxLeft2);
-            }
-        } else if (maxLeft1 > minRight2) {
-            high = partition1 - 1;
+    while (i < size1 && j < size2) {
+        if (arr1[i] <= arr2[j]) {
+            merged[k++] = arr1[i++];
         } else {
-            low = partition1 + 1;
+            merged[k++] = arr2[j++];
         }
     }
+    while (i < size1) {
+        merged[k++] = arr1[i++];
+    }
+    while (j < size2) {
+        merged[k++] = arr2[j++];
+    }
 
-    throw invalid_argument("Input arrays are not sorted or not valid.");
+    int totalSize = size1 + size2;
+    if (totalSize % 2 == 0) {
+        return (merged[totalSize / 2 - 1] + merged[totalSize / 2]) / 2.0;
+    } else {
+        return merged[totalSize / 2];
+    }
 }
 
 int main() {
@@ -68,17 +71,13 @@ int main() {
         cin >> arr2[i];
     }
 
-    // Check if both arrays are empty
-    if (size1 == 0 && size2 == 0) {
-        cout << "Empty Array" << endl;
-        return 0;
-    }
+    // Sort both arrays before finding the median
+    sort(arr1.begin(), arr1.end());
+    sort(arr2.begin(), arr2.end());
 
-    try {
-        double median = findMedianBinarySearch(arr1, arr2);
+    double median = findMedian(arr1, arr2);
+    if (!(size1 == 0 && size2 == 0)) {
         cout << "Median = " << median << endl;
-    } catch (const exception& e) {
-        cout << e.what() << endl;
     }
 
     return 0;
