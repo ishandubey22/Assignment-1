@@ -76,9 +76,7 @@ int main() {
 
     try {
         double median = findMedianBinarySearch(arr1, arr2);
-        if (!isnan(median)) {
-    cout << "Median = " << median << endl;
-}
+        cout << "Median = " << median << endl;
     } catch (const exception& e) {
         cout << e.what() << endl;
     }
