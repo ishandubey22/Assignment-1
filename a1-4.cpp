@@ -1,57 +1,59 @@
 #include <iostream>
 #include <vector>
-#include <algorithm> // For sort function
-#include <cmath> // For std::nan
+#include <algorithm> // For std::min
+#include <limits>    // For handling infinity values
 
 using namespace std;
 
-// Function to find the median of two sorted arrays
-double findMedian(vector<int>& arr1, vector<int>& arr2) {
+// Function to find the median in O(m + n) time using a merging approach
+double findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr2) {
     int size1 = arr1.size();
     int size2 = arr2.size();
 
-    // Handle the case when both arrays are empty
+    // Handle case when both arrays are empty
     if (size1 == 0 && size2 == 0) {
         cout << "Empty Array" << endl;
-        return std::nan(""); // Return NaN for clarity
+        return numeric_limits<double>::quiet_NaN(); // Return NaN for invalid input
     }
 
-    // Handle the case when only one array is empty
+    // If one array is empty, simply find the median of the other array
     if (size1 == 0) {
-        return (size2 % 2 == 0)
-            ? (arr2[size2 / 2 - 1] + arr2[size2 / 2]) / 2.0
-            : arr2[size2 / 2];
+        return size2 % 2 == 0 ? (arr2[size2 / 2 - 1] + arr2[size2 / 2]) / 2.0 : arr2[size2 / 2];
     }
     if (size2 == 0) {
-        return (size1 % 2 == 0)
-            ? (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0
-            : arr1[size1 / 2];
-    }
-
-    // Merge arrays
-    vector<int> merged(size1 + size2);
-    int i = 0, j = 0, k = 0;
-
-    while (i < size1 && j < size2) {
-        if (arr1[i] <= arr2[j]) {
-            merged[k++] = arr1[i++];
-        } else {
-            merged[k++] = arr2[j++];
-        }
-    }
-    while (i < size1) {
-        merged[k++] = arr1[i++];
-    }
-    while (j < size2) {
-        merged[k++] = arr2[j++];
+        return size1 % 2 == 0 ? (arr1[size1 / 2 - 1] + arr1[size1 / 2]) / 2.0 : arr1[size1 / 2];
     }
 
     int totalSize = size1 + size2;
-    if (totalSize % 2 == 0) {
-        return (merged[totalSize / 2 - 1] + merged[totalSize / 2]) / 2.0;
-    } else {
-        return merged[totalSize / 2];
+    bool isEven = (totalSize % 2 == 0);
+    int medianPos = (totalSize - 1) / 2;
+
+    int i = 0, j = 0; // Pointers for both arrays
+    int current = 0, previous = 0;
+
+    // Traverse the arrays using merge logic
+    for (int count = 0; count <= medianPos + 1; ++count) {
+        previous = current;
+
+        if (i < size1 && (j >= size2 || arr1[i] < arr2[j])) {
+            current = arr1[i++];
+        } else {
+            current = arr2[j++];
+        }
+
+        // If we have found the middle element(s), compute the median
+        if (count == medianPos) {
+            if (isEven) {
+                // If even, the median is the average of the two middle elements
+                return (current + previous) / 2.0;
+            } else {
+                // If odd, the median is the middle element
+                return current;
+            }
+        }
     }
+
+    return numeric_limits<double>::quiet_NaN(); // Should never reach here
 }
 
 int main() {
@@ -71,14 +73,9 @@ int main() {
         cin >> arr2[i];
     }
 
-    // Sort both arrays before finding the median
-    sort(arr1.begin(), arr1.end());
-    sort(arr2.begin(), arr2.end());
-
-    double median = findMedian(arr1, arr2);
-    if (!(size1 == 0 && size2 == 0)) {
-        cout << "Median = " << median << endl;
-    }
+    double median = findMedianTwoUnsortedArrays(arr1, arr2);
+    cout << "Median = " << median << endl;
 
     return 0;
 }
+
