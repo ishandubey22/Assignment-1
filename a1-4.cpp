@@ -47,7 +47,7 @@ bool findMedianTwoUnsortedArrays(const vector<int>& arr1, const vector<int>& arr
 
     // Handle case when both arrays are empty
     if (size1 == 0 && size2 == 0) {
-        cout << "Both arrays are empty. No median available." << endl;
+        cout << "Empty Array" << endl;
         return false; // Indicate failure to calculate median
     }
 
