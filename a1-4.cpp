@@ -55,6 +55,10 @@ double findMedian(vector<int>& arr1, vector<int>& arr2) {
 }
 
 int main() {
+    // Sort both arrays before finding the median
+    sort(arr1.begin(), arr1.end());
+    sort(arr2.begin(), arr2.end());
+
     int size1;
     cin >> size1;
 
@@ -71,10 +75,7 @@ int main() {
         cin >> arr2[i];
     }
 
-    // Sort both arrays before finding the median
-    sort(arr1.begin(), arr1.end());
-    sort(arr2.begin(), arr2.end());
-
+    
     double median = findMedian(arr1, arr2);
     if (!(size1 == 0 && size2 == 0)) {
         cout << "Median = " << median << endl;
