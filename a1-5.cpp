@@ -1,122 +1,129 @@
 #include <iostream>
-
 using namespace std;
 
-// Stack class to represent the towers
-class Stack {
-    int* arr;
-    int top;
-    int capacity;
+// Class to represent a stack (or tower)
+class Tower {
+    int* disks;
+    int maxSize;
+    int topIndex;
 
 public:
-    Stack(int size) {
-        arr = new int[size];
-        capacity = size;
-        top = -1;
+    Tower(int capacity) {
+        disks = new int[capacity];
+        maxSize = capacity;
+        topIndex = -1;
     }
 
-    ~Stack() {
-        delete[] arr;
+    ~Tower() {
+        delete[] disks;
     }
 
-    // Function to add an element to the stack
-    void push(int x) {
-        if (isFull()) return;
-        arr[++top] = x;
+    // Function to add a disk to the tower
+    void addDisk(int disk) {
+        if (topIndex < maxSize - 1) {
+            disks[++topIndex] = disk;
+        }
     }
 
-    // Function to pop the top element
-    int pop() {
-        if (isEmpty()) return -1;
-        return arr[top--];
+    // Function to remove the top disk from the tower
+    int removeDisk() {
+        if (topIndex >= 0) {
+            return disks[topIndex--];
+        }
+        return -1;
     }
 
-    // Function to display the elements of the stack
-    void display() const {
-        if (isEmpty()) {
+    // Display the current stack of disks
+    void show() const {
+        if (topIndex == -1) {
             cout << "Empty";
         } else {
-            for (int i = 0; i <= top; i++) {
-                cout << arr[i] << " ";
+            for (int i = 0; i <= topIndex; i++) {
+                cout << disks[i] << " ";
             }
         }
         cout << endl;
     }
 
-private:
-    bool isFull() const {
-        return top == capacity - 1;
+    // Utility functions to check state
+    bool isTowerEmpty() const {
+        return topIndex == -1;
     }
 
-    bool isEmpty() const {
-        return top == -1;
+    bool isTowerFull() const {
+        return topIndex == maxSize - 1;
     }
 };
 
-// Global stacks for the towers
-Stack* A;
-Stack* B;
-Stack* C;
+// Global towers
+Tower* towerA;
+Tower* towerB;
+Tower* towerC;
 
-// Function to display the state of the towers
-void displayTowers() {
+// Function to display the current state of all towers
+void showTowers() {
     cout << "Tower A: ";
-    A->display();
+    towerA->show();
     cout << "Tower B: ";
-    B->display();
+    towerB->show();
     cout << "Tower C: ";
-    C->display();
+    towerC->show();
     cout << endl;
 }
 
-// Function to move disks between towers
-void moveDisk(Stack& from, Stack& to, char fromTower, char toTower) {
-    int disk = from.pop();
-    if (disk != -1) {
-        to.push(disk);
-        cout << "Move disk " << disk << " from " << fromTower << " to " << toTower << endl;
-        displayTowers();
+// Function to handle disk movement between two towers
+void moveDiskBetweenTowers(Tower& from, Tower& to, char fromLabel, char toLabel) {
+    int disk = from.removeDisk();
+    if (disk >= 0) {
+        to.addDisk(disk);
+        cout << "Move disk " << disk << " from " << fromLabel << " to " << toLabel << endl;
+        showTowers();
     }
 }
 
-// Recursive function to solve Tower of Hanoi
-void rearrangeDisks(int n, Stack& A, Stack& C, Stack& B, char from, char to, char aux) {
-    if (n == 0) return;
+// Recursive function to rearrange the disks following Tower of Hanoi rules
+void solveHanoi(int diskCount, Tower& source, Tower& destination, Tower& auxiliary, char sourceLabel, char destinationLabel, char auxiliaryLabel) {
+    if (diskCount == 0) return;
 
-    rearrangeDisks(n - 1, A, B, C, from, aux, to);
-    moveDisk(A, C, from, to);
-    rearrangeDisks(n - 1, B, C, A, aux, to, from);
+    // Move n-1 disks from source to auxiliary tower
+    solveHanoi(diskCount - 1, source, auxiliary, destination, sourceLabel, auxiliaryLabel, destinationLabel);
+
+    // Move the nth disk from source to destination
+    moveDiskBetweenTowers(source, destination, sourceLabel, destinationLabel);
+
+    // Move the n-1 disks from auxiliary to destination
+    solveHanoi(diskCount - 1, auxiliary, destination, source, auxiliaryLabel, destinationLabel, sourceLabel);
 }
 
 int main() {
-    int n;
-    cin >> n;
+    int numDisks;
+    cin >> numDisks;
 
-    // Input validation
-    if (n <= 0) {
+    if (numDisks <= 0) {
         cout << "Invalid Input" << endl;
         return 1;
     }
 
-    A = new Stack(n);
-    B = new Stack(n);
-    C = new Stack(n);
+    // Create towers with the given number of disks
+    towerA = new Tower(numDisks);
+    towerB = new Tower(numDisks);
+    towerC = new Tower(numDisks);
 
-    // Initialize tower A with disks
-    for (int i = n; i >= 1; i--) {
-        A->push(i);
+    // Add disks to Tower A in descending order
+    for (int i = numDisks; i >= 1; i--) {
+        towerA->addDisk(i);
     }
 
-    // Display initial state of the towers
-    displayTowers();
+    // Display initial setup
+    showTowers();
 
     // Solve the Tower of Hanoi problem
-    rearrangeDisks(n, *A, *C, *B, 'A', 'C', 'B');
+    solveHanoi(numDisks, *towerA, *towerC, *towerB, 'A', 'C', 'B');
 
-    // Clean up
-    delete A;
-    delete B;
-    delete C;
+    // Clean up memory
+    delete towerA;
+    delete towerB;
+    delete towerC;
 
     return 0;
 }
